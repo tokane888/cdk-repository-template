@@ -1,0 +1,12 @@
+---
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # TODO: "workspaces/"の後のディレクトリ名を、テンプレ使用先のディレクトリ名に変更
+      - ../:/workspaces/cdk-repository-template:cached
+    command: sleep infinity
+    environment:
+      - TZ=Asia/Tokyo
