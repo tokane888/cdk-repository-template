@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib/core';
-import { CdkRepositoryTemplateStack } from '../lib/cdk-repository-template-stack';
+import { CdkRepositoryTemplateStack } from '../lib/sample-stack';
 
 const app = new cdk.App();
 new CdkRepositoryTemplateStack(app, 'CdkRepositoryTemplateStack', {
