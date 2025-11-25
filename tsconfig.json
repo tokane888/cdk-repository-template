@@ -6,12 +6,10 @@
     "lib": [
       "es2022"
     ],
-    "declaration": true,
     "strict": true,
     "noImplicitReturns": true,
     "inlineSourceMap": true,
     "inlineSources": true,
-    "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "skipLibCheck": true
   },
