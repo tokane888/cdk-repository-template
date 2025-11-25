@@ -1,9 +1,6 @@
 {
   "name": "cdk-repository-template",
   "version": "0.1.0",
-  "bin": {
-    "cdk-repository-template": "bin/cdk-repository-template.js"
-  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
