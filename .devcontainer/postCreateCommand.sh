@@ -14,9 +14,9 @@ fi
 # cipherが存在しない場合のみ追加
 if ! claude mcp list 2>/dev/null | grep -q "cipher"; then
     # APIキーの存在確認
-    if [ -z "$ANTHROPIC_API_KEY" ] && [ -z "$OLLAMA_BASE_URL" ]; then
-        echo "⚠️  WARNING: No API keys found for cipher MCP server."
-        echo "   cipher requires one of: ANTHROPIC_API_KEY or OLLAMA_BASE_URL"
+    if [ -z "$ANTHROPIC_API_KEY" ]; then
+        echo "⚠️  WARNING: No API key found for cipher MCP server."
+        echo "   cipher requires: ANTHROPIC_API_KEY"
         echo "   Set the API key in your host environment (~/.zshrc or ~/.bashrc) and rebuild the DevContainer."
         echo "   Skipping cipher MCP server installation..."
     else
