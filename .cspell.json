@@ -1,0 +1,12 @@
+{
+  "ignorePaths": [
+    // vscode拡張名, libの名前等固有名詞が多いファイルはspell check対象から除外
+    ".devcontainer/devcontainer.json",
+    ".devcontainer/Dockerfile"
+  ],
+  // 単語登録
+  "words": [],
+  "ignoreRegExpList": [
+    "[０-９Ａ-Ｚａ-ｚぁ-んァ-ヶ亜-熙纊-黑]+" // 日本語に対してspell checkが正常に機能しないのでcheck対象から除外
+  ]
+}
