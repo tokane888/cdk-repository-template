@@ -72,6 +72,8 @@
   "mounts": [
     // devcontainer上からgit pull/push可能にするための設定
     "source=${localEnv:HOME}/.ssh,target=/tmp/.ssh,type=bind,consistency=cached",
+    // aws cli設定ファイル
+    "source=${localEnv:HOME}/.aws,target=/home/node/.aws,type=bind,consistency=cached",
     // github cli設定
     // TODO: ghを使用しない場合は削除
     "source=${localEnv:HOME}/.config/gh,target=/home/vscode/.config/gh,type=bind,consistency=cached",
