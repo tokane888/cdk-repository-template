@@ -1,0 +1,46 @@
+name: auto-merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: "CDK diff (no change -> auto merge)"
+    runs-on: ubuntu-latest
+
+    # Dependabot PR に対してのみ実行
+    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # cdk diff --fail: 差分があれば終了コード1で失敗 => 自動マージしない
+      # cdk diffは内部的にsynthを実行するため、明示的なsynth不要
+      - name: CDK diff (fail on changes)
+        run: npx cdk diff --fail '**'
+        env:
+          CI: true
+
+      # ここまで来た = diffに差分なし
+      # auto-merge実行
+      - name: Enable auto-merge (squash)
+        if: ${{ success() }}
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
