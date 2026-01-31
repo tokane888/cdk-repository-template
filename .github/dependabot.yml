@@ -12,6 +12,3 @@ updates:
           - "*"
     commit-message:
       prefix: "chore(deps)"
-    labels:
-      - "dependencies"
-      - "automerge"
