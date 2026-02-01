@@ -25,9 +25,9 @@ jobs:
     steps:
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-        role-to-assume: ${{ env.ROLE_ARN }}
-        role-session-name: ${{ env.SESSION_NAME }}
-        aws-region: ap-northeast-1
+          role-to-assume: ${{ env.ROLE_ARN }}
+          role-session-name: ${{ env.SESSION_NAME }}
+          aws-region: ap-northeast-1
 
       - name: Checkout
         uses: actions/checkout@v6
