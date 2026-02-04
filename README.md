@@ -11,3 +11,6 @@
   - githubのsettings pageを表示
   - "Allow auto-merge"を有効化
 - dependabotによる自動PRマージを有効にするため、github OIDC provider等のAWSとの連携に必要な要素をセットアップ
+  - github repositoryのsettings => Actions => General で下記有効化
+    - "Allow GitHub Actions to create and approve pull requests"
+    - 有効化しないとbranchがガードされている場合に自動マージがblockされる
