@@ -7,6 +7,8 @@
 ## 使用時TODO
 
 - git repository 内から"TODO:"を検索して対応
+- claude codeを使用する場合
+  - [公式手順](https://code.claude.com/docs/ja/github-actions#%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97)に従ってsetup
 - dependabotが自動で作成するpackage.jsonのupdate PRの自動マージを下記手順で有効にする
   - githubのsettings pageを表示
   - "Allow auto-merge"を有効化
