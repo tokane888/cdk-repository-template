@@ -12,6 +12,7 @@ RUN npm install -g cspell
 RUN npm install -g dprint
 # Install cipher with retry logic to handle network issues
 # RUN npm install -g @byterover/cipher || npm install -g @byterover/cipher || npm install -g @byterover/cipher
+RUN npm install -g @biomejs/biome
 RUN npm install -g @byterover/cipher
 
 # install other packages
