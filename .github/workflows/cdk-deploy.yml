@@ -1,0 +1,110 @@
+name: CDK Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+          - sandbox
+          - common
+      stack_name:
+        description: 'Stack name pattern (e.g., "**" for all, "ApiStack-dev" for specific)'
+        required: false
+        default: '**'
+      deploy_lambda:
+        description: 'Deploy Lambda stacks? (false to skip)'
+        required: false
+        type: boolean
+        default: true
+
+env:
+  AWS_REGION: ap-northeast-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get AWS account ID for environment
+        id: aws-account
+        run: |
+          case "${{ inputs.environment }}" in
+            common)
+              echo "account_id=000000000000" >> $GITHUB_OUTPUT
+              ;;
+            dev)
+              echo "account_id=111111111111" >> $GITHUB_OUTPUT
+              ;;
+            sandbox)
+              echo "account_id=222222222222" >> $GITHUB_OUTPUT
+              ;;
+            staging)
+              echo "account_id=333333333333" >> $GITHUB_OUTPUT
+              ;;
+            prod)
+              echo "account_id=444444444444" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::${{ steps.aws-account.outputs.account_id }}:role/GitHubActionsCDKDeployRole
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: CDK Bootstrap (if needed)
+        run: |
+          npx cdk bootstrap aws://${{ steps.aws-account.outputs.account_id }}/${{ env.AWS_REGION }}
+
+      - name: CDK Diff
+        run: |
+          if [[ "${{ inputs.deploy_lambda }}" == "false" ]]; then
+            npx cdk diff -c env=${{ inputs.environment }} -c deployLambda=false '${{ inputs.stack_name }}'
+          else
+            npx cdk diff -c env=${{ inputs.environment }} '${{ inputs.stack_name }}'
+          fi
+
+      - name: CDK Deploy
+        run: |
+          if [[ "${{ inputs.deploy_lambda }}" == "false" ]]; then
+            npx cdk deploy -c env=${{ inputs.environment }} -c deployLambda=false --require-approval never '${{ inputs.stack_name }}'
+          else
+            npx cdk deploy -c env=${{ inputs.environment }} --require-approval never '${{ inputs.stack_name }}'
+          fi
+
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "✅ Successfully deployed to ${{ inputs.environment }}"
+          echo "   Stacks: ${{ inputs.stack_name }}"
+          echo "   Lambda deployment: ${{ inputs.deploy_lambda }}"
+
+      - name: Deployment failed
+        if: failure()
+        run: |
+          echo "❌ Deployment failed for ${{ inputs.environment }}"
+          echo "   Check the logs above for details"
+          exit 1
