@@ -19,7 +19,7 @@ AWS CDK (TypeScript)でマルチ環境・マルチStackのサーバーレスバ�
 
 - **マルチ環境対応**: dev, staging, prod, sandbox, common環境を管理
 - **マルチStack構成**: Infrastructure, API, Batch, Monitoringを分離
-- **コンテナベースLambda**: Go言語 + ECRコンテナイメージ
+- **コンテナベースLambda**: ECRコンテナイメージ
 - **SSM Parameter Store統合**: DynamoDBテーブル名などをSSMで管理し、lambda等から読み取り可能に
 - **Semantic Versioning対応**: ECRライフサイクルポリシーでバージョンタグを永続保持
 - **環境別設定**: 環境ごとの最適化された設定（dev: 軽量, prod: 高可用性）
@@ -35,18 +35,18 @@ AWS CDK (TypeScript)でマルチ環境・マルチStackのサーバーレスバ�
 │   Common    │  ECRリポジトリ（全環境で共有）
 └─────────────┘
       ↓ pull
-┌─────────────┬──────────┬──────────┬──────────┐
-│     Dev     │ Staging  │   Prod   │ Sandbox  │
-└─────────────┴──────────┴──────────┴──────────┘
+┌─────────────┬─────────┬─────────────┬──────────┐
+│   Sandbox   │   Dev   │   Staging   │   Prod   │
+└─────────────┴─────────┴─────────────┴──────────┘
 ```
 
-| 環境 | 用途 | AWSアカウント | Dockerタグ |
-| ------ | ------ | -------------- | ----------- |
-| common | 共有リソース（ECR） | 独立 | - |
-| dev | 開発環境 | 独立 | `latest` |
-| staging | ステージング | 独立 | `v1.0.0` |
-| prod | 本番環境 | 独立 | `v1.0.0` |
-| sandbox | 実験環境 | 独立 | `latest` |
+| 環境 | 用途 |
+| ------ | ------ |
+| common | 共有リソース（ECR） |
+| sandbox | 実験環境 |
+| dev | 開発環境(基本的にCI/CDでデプロイ) |
+| staging | ステージング |
+| prod | 本番環境 |
 
 ### Stack構成
 
@@ -360,7 +360,7 @@ npx cdk deploy -c env=staging '**'
 ## ECRライフサイクルポリシー
 
 | Priority | ルール | 結果 |
-|----------|--------|------|
+| ---------- | -------- | ------ |
 | 1 | `v*.*.*` タグを保持 | **Semantic Versionタグは永久保持** |
 | 2 | `latest` タグを1つ保持 | latestは常に上書き |
 | 3 | Untaggedイメージを7日後削除 | 中間ビルド成果物をクリーンアップ |
@@ -399,15 +399,3 @@ Dependabotが作成するPRは以下の条件で自動マージされます：
 4. **最小権限の原則**: IAMロールは必要最小限の権限のみ付与
 5. **リソースタグ**: 全リソースに環境タグを付与
 6. **監視設定**: 本番環境では必ず監視を有効化
-
-## 参考リンク
-
-- [AWS CDK Documentation](https://docs.aws.amazon.com/cdk/latest/guide/)
-- [Lambda Container Images](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
-- [ECR Lifecycle Policies](https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html)
-- [SSM Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html)
-- [Lambda Repository Setup Guide](docs/lambda-repository-setup.md)
-
----
-
-**注意**: このテンプレートはAWSアカウントIDなどがプレースホルダーとなっています。実際に使用する前に`lib/config/environment.ts`を必ず更新してください。
