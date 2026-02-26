@@ -222,141 +222,6 @@ npx cdk list -c env=dev
 2. GitHub UIから `Actions` → `CDK Deploy` → `Run workflow`
 3. 環境とStackを選択して実行
 
-## 環境別の設定
-
-### Dev環境
-
-- Dockerタグ: `latest`
-- DynamoDB: オンデマンド課金、PITR無効
-- S3: バージョニング無効
-- RemovalPolicy: `DESTROY`（削除容易）
-- 監視: 無効
-
-### Staging環境
-
-- Dockerタグ: `v1.0.0`（固定バージョン）
-- DynamoDB: オンデマンド課金、PITR有効
-- S3: バージョニング有効
-- RemovalPolicy: `DESTROY`
-- 監視: 有効（基本的なアラーム）
-
-### Prod環境
-
-- Dockerタグ: `v1.0.0`（固定バージョン）
-- DynamoDB: オンデマンド課金、PITR有効
-- S3: バージョニング有効
-- RemovalPolicy: `RETAIN`（誤削除防止）
-- 監視: 有効（完全なアラーム）
-
-## カスタマイズ方法
-
-### DynamoDBテーブルの追加
-
-`lib/config/environment.ts`を編集：
-
-```typescript
-dev: {
-  dynamoDbTables: [
-    { tableName: 'main-table', partitionKey: 'PK', sortKey: 'SK' },
-    { tableName: 'new-table', partitionKey: 'id' }, // ← 追加
-  ],
-  // ...
-}
-```
-
-### Lambda関数の設定変更
-
-```typescript
-dev: {
-  lambdaApi: {
-    imageTag: 'latest',
-    memorySize: 1024,  // ← メモリサイズ変更
-    timeout: 60,       // ← タイムアウト変更
-    architecture: 'arm64',
-  },
-  // ...
-}
-```
-
-### 新しいStackの追加
-
-1. `lib/stacks/app/new-stack.ts` を作成
-2. `bin/app.ts` にStack生成ロジックを追加
-3. 必要に応じてdependencyを設定
-
-## テスト
-
-```bash
-# ユニットテスト実行
-npm test
-
-# カバレッジ付きテスト
-npm test -- --coverage
-
-# 特定のテストファイルのみ実行
-npm test -- environment.test.ts
-```
-
-## トラブルシューティング
-
-### ECR imageが見つからない
-
-**原因**: Lambda imageがECRに存在しない
-
-**解決策**: `deployLambda=false`フラグを使用してInfraStackのみデプロイ
-
-```bash
-npx cdk deploy -c env=dev -c deployLambda=false InfraStack-dev
-```
-
-### SSM parameterが見つからない
-
-**原因**: InfraStackがデプロイされていない
-
-**解決策**: InfraStackを先にデプロイ
-
-```bash
-npx cdk deploy -c env=dev InfraStack-dev
-```
-
-### Cross-account ECRアクセスエラー
-
-**原因**: クロスアカウント権限が設定されていない
-
-**解決策**: CommonEcrStackの`allowedAccountIds`を確認
-
-## リリースフロー
-
-### 開発（dev/sandbox）
-
-```bash
-# 1. コード変更
-vim lambda/api/main.go
-
-# 2. Git push（GitHub Actionsで自動ビルド）
-git commit -m "feat: add new endpoint"
-git push origin main
-
-# 3. CDKデプロイ（必要に応じて）
-npx cdk deploy -c env=dev ApiStack-dev
-```
-
-### リリース（staging/prod）
-
-```bash
-# 1. リリースタグ作成
-git tag v1.0.0
-git push origin v1.0.0
-
-# 2. GitHub ActionsでECRに v1.0.0 タグでpush（自動）
-
-# 3. 環境設定更新
-# lib/config/environment.ts の imageTag を v1.0.0 に変更
-
-# 4. CDKデプロイ
-npx cdk deploy -c env=staging '**'
-```
-
 ## ECRライフサイクルポリシー
 
 | Priority | ルール | 結果 |
@@ -365,26 +230,14 @@ npx cdk deploy -c env=staging '**'
 | 2 | `latest` タグを1つ保持 | latestは常に上書き |
 | 3 | Untaggedイメージを7日後削除 | 中間ビルド成果物をクリーンアップ |
 
-## Claude Code統合
-
-このリポジトリはClaude Codeと統合されています：
-
-```bash
-# Claude Codeでヘルプを表示
-/help
-
-# フィードバックを送信
-https://github.com/anthropics/claude-code/issues
-```
-
 ## Dependabot自動マージ
 
-Dependabotが作成するPRは以下の条件で自動マージされます：
+Dependabotが作成するPRは下記の条件を満たす場合に自動マージされます。
 
-- package.jsonの更新
-- `cdk diff`で変更なし（InfraStack-devのみチェック）
+- package.jsonの更新であること
+- PR適用後にdev環境で`cdk diff`実行した場合に差分がないこと
 
-設定方法：
+設定方法:
 
 1. GitHubリポジトリの Settings → General
 2. "Allow auto-merge"を有効化
