@@ -408,14 +408,6 @@ Dependabotが作成するPRは以下の条件で自動マージされます：
 - [SSM Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html)
 - [Lambda Repository Setup Guide](docs/lambda-repository-setup.md)
 
-## ライセンス
-
-MIT License
-
-## 貢献
-
-PRやIssueは大歓迎です！
-
 ---
 
 **注意**: このテンプレートはAWSアカウントIDなどがプレースホルダーとなっています。実際に使用する前に`lib/config/environment.ts`を必ず更新してください。
