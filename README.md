@@ -104,8 +104,6 @@ InfraStack → ApiStack, BatchStack → MonitoringStack
 │           ├── batch-stack.ts    # Batch Stack
 │           └── monitoring-stack.ts # Monitoring Stack
 ├── test/                         # テストコード
-├── docs/
-│   └── lambda-repository-setup.md # Lambda管理ガイド
 ├── .github/workflows/
 │   ├── cdk-deploy.yml            # CDKデプロイ
 │   ├── auto-merge.yml            # Dependabot自動マージ
@@ -157,7 +155,7 @@ npx cdk deploy -c env=common CommonEcrStack
 
 ### 4. Lambda関数の準備
 
-Lambda関数は別リポジトリで管理します。詳細は [docs/lambda-repository-setup.md](docs/lambda-repository-setup.md) を参照してください。
+Lambda関数は別リポジトリで管理
 
 ```bash
 # 初回デプロイ時はダミーイメージをpush
