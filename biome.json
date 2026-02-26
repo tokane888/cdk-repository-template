@@ -7,7 +7,7 @@
       "!cdk.json",
       "!cdk.out/*",
       "!.cspell.jsonc",
-      "!dist/*",
+      "!dist/**",
       "!docs/*",
       "!dprint.json",
       "!jest.config.mjs",
