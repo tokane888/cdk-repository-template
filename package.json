@@ -8,14 +8,14 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.13",
-    "@types/node": "^25.1.0",
-    "aws-cdk": "2.1104.0",
+    "@biomejs/biome": "^2.4.6",
+    "@types/node": "^25.3.5",
+    "aws-cdk": "2.1109.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.3"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.236.0",
+    "aws-cdk-lib": "2.241.0",
     "constructs": "^10.4.5"
   }
 }
