@@ -5,16 +5,12 @@
     "build": "tsc",
     "clean": "rm -rf dist",
     "watch": "tsc -w",
-    "test": "jest",
     "cdk": "cdk"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.13",
-    "@types/jest": "^30.0.0",
     "@types/node": "^25.1.0",
     "aws-cdk": "2.1104.0",
-    "jest": "^30.2.0",
-    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.3"
   },

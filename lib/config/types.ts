@@ -8,39 +8,13 @@
 export type Environment = 'dev' | 'staging' | 'prod' | 'sandbox' | 'common';
 
 /**
- * DynamoDB table configuration
+ * Security configuration (CloudTrail + GuardDuty)
  */
-export interface DynamoDbTableConfig {
-  /** Logical table name (used in SSM parameter path) */
-  tableName: string;
-  /** Partition key attribute name */
-  partitionKey: string;
-  /** Sort key attribute name (optional) */
-  sortKey?: string;
-}
-
-/**
- * Lambda function configuration
- */
-export interface LambdaConfig {
-  /** Docker image tag (e.g., 'latest' or 'v1.0.0') */
-  imageTag: string;
-  /** Memory size in MB */
-  memorySize: number;
-  /** Timeout in seconds */
-  timeout: number;
-  /** CPU architecture */
-  architecture: 'x86_64' | 'arm64';
-}
-
-/**
- * Monitoring configuration
- */
-export interface MonitoringConfig {
-  /** Whether monitoring stack is enabled */
-  enabled: boolean;
-  /** Email address for alarm notifications */
-  alarmEmail?: string;
+export interface SecurityConfig {
+  /** CloudTrail log retention in days */
+  cloudTrailLogRetentionDays: number;
+  /** GuardDuty finding publishing frequency */
+  guardDutyFindingFrequency: 'FIFTEEN_MINUTES' | 'ONE_HOUR' | 'SIX_HOURS';
 }
 
 /**
@@ -53,20 +27,10 @@ export interface EnvironmentConfig {
   accountId: string;
   /** AWS region */
   region: string;
-  /** DynamoDB table configurations */
-  dynamoDbTables: DynamoDbTableConfig[];
-  /** Lambda API configuration */
-  lambdaApi: LambdaConfig;
-  /** Lambda Batch configuration */
-  lambdaBatch: LambdaConfig;
-  /** Monitoring configuration */
-  monitoring: MonitoringConfig;
   /** CloudFormation RemovalPolicy for critical resources */
   removalPolicy: 'DESTROY' | 'RETAIN' | 'SNAPSHOT';
-  /** DynamoDB Point-in-Time Recovery */
-  dynamoDbPitr: boolean;
-  /** S3 bucket versioning */
-  s3Versioning: boolean;
+  /** Security configuration (CloudTrail + GuardDuty) */
+  security?: SecurityConfig;
   /** Resource tags */
   tags: {
     Environment: string;
@@ -85,45 +49,9 @@ export interface CommonEcrStackProps {
 }
 
 /**
- * Infra Stack Props
+ * Security Stack Props
  */
-export interface InfraStackProps {
+export interface SecurityStackProps {
   env: { account: string; region: string };
   config: EnvironmentConfig;
-}
-
-/**
- * Api Stack Props
- */
-export interface ApiStackProps {
-  env: { account: string; region: string };
-  config: EnvironmentConfig;
-  /** ECR repository URI for API Lambda */
-  ecrRepositoryUri: string;
-  /** Reference to InfraStack for resource access */
-  infraStack: any; // Will be typed as InfraStack in implementation
-}
-
-/**
- * Batch Stack Props
- */
-export interface BatchStackProps {
-  env: { account: string; region: string };
-  config: EnvironmentConfig;
-  /** ECR repository URI for Batch Lambda */
-  ecrRepositoryUri: string;
-  /** Reference to InfraStack for resource access */
-  infraStack: any; // Will be typed as InfraStack in implementation
-}
-
-/**
- * Monitoring Stack Props
- */
-export interface MonitoringStackProps {
-  env: { account: string; region: string };
-  config: EnvironmentConfig;
-  /** Reference to ApiStack for monitoring */
-  apiStack: any; // Will be typed as ApiStack in implementation
-  /** Reference to BatchStack for monitoring */
-  batchStack: any; // Will be typed as BatchStack in implementation
 }
