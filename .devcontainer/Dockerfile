@@ -4,6 +4,7 @@ RUN npm install -g npm@latest
 
 # install npm packages
 # TODO: remove cc-sdd and @byperover/cipher if not using Claude Code
+RUN npm install -g aws-cdk
 RUN npm install -g cc-sdd@latest
 RUN npm install -g cspell
 RUN npm install -g dprint
