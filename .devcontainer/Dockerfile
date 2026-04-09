@@ -9,8 +9,6 @@ RUN npm install -g cc-sdd@latest
 RUN npm install -g cspell
 RUN npm install -g dprint
 RUN npm install -g tsx
-# Install cipher with retry logic to handle network issues
-# RUN npm install -g @byterover/cipher || npm install -g @byterover/cipher || npm install -g @byterover/cipher
 RUN npm install -g @biomejs/biome
 RUN npm install -g @byterover/cipher
 
