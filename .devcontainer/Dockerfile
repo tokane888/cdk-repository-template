@@ -1,9 +1,6 @@
 FROM mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm
 
-# install latest nodejs and npm
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
-    && apt-get update -y \
-    && apt-get install -y nodejs
+RUN npm install -g npm@latest
 
 # install npm packages
 # TODO: remove cc-sdd and @byperover/cipher if not using Claude Code
