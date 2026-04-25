@@ -1,0 +1,47 @@
+name: Test and lint
+
+on:
+  push:
+
+jobs:
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: infra/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Biome check
+        run: npx biome ci .
+
+      - name: cspell check
+        run: npx cspell "**/*.ts" --no-progress
+
+  test:
+    name: Test & Synth
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: infra/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Jest
+        run: npx jest
+
+      - name: CDK Synth
+        run: npx cdk synth -c env=snd
