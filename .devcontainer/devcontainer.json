@@ -87,10 +87,6 @@
   ],
   "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
   "postStartCommand": "bash ./.devcontainer/postStartCommand.sh",
-  // TODO: AIを使用しない場合は削除
-  "remoteEnv": {
-    "OLLAMA_BASE_URL": "${localEnv:OLLAMA_BASE_URL}"
-  },
   "containerEnv": {
     "TZ": "Asia/Tokyo"
   }
