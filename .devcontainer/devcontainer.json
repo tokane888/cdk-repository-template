@@ -79,17 +79,16 @@
     "source=${localEnv:HOME}/.aws,target=/home/node/.aws,type=bind,consistency=cached",
     // github cli設定
     // TODO: ghを使用しない場合は削除
-    "source=${localEnv:HOME}/.config/gh,target=/home/vscode/.config/gh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.config/gh,target=/home/node/.config/gh,type=bind,consistency=cached",
 
     // TODO: claude codeの使用が許可されない場合は削除
-    "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind,consistency=cached"
   ],
   "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh",
   "postStartCommand": "bash ./.devcontainer/postStartCommand.sh",
   // TODO: AIを使用しない場合は削除
   "remoteEnv": {
-    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
     "OLLAMA_BASE_URL": "${localEnv:OLLAMA_BASE_URL}"
   },
   "containerEnv": {
