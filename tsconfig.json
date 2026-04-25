@@ -2,12 +2,11 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": ".",
-    "target": "ES2024",
+    "target": "ES2022",
+    "types": ["node", "jest"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "lib": [
-      "es2024"
-    ],
+    "lib": ["es2022"],
     "strict": true,
     "noImplicitReturns": true,
     "inlineSourceMap": true,
@@ -15,9 +14,5 @@
     "strictPropertyInitialization": false,
     "skipLibCheck": true
   },
-  "exclude": [
-    "node_modules",
-    "cdk.out",
-    "dist"
-  ]
+  "exclude": ["node_modules", "cdk.out", "dist"]
 }
